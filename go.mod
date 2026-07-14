@@ -7,8 +7,8 @@ require (
 	github.com/InVisionApp/go-logger v1.0.1
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/golang/protobuf v1.5.4
-	github.com/jackc/pgx/v4 v4.18.1
-	github.com/jmoiron/sqlx v1.3.5
+	github.com/jackc/pgx/v4 v4.18.3
+	github.com/jmoiron/sqlx v1.4.0
 	github.com/joho/godotenv v1.5.1
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/nats-io/nats.go v1.27.1
@@ -16,8 +16,8 @@ require (
 	github.com/onsi/gomega v1.36.2
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
-	github.com/rabbitmq/amqp091-go v1.10.0
-	github.com/relistan/go-director v0.0.0-20200406104025-dbbf5d95248d
+	github.com/rabbitmq/amqp091-go v1.12.0
+	github.com/relistan/go-director v0.0.0-20240410125439-78829fce487d
 	github.com/satori/go.uuid v1.2.0
 	github.com/segmentio/kafka-go v0.4.42
 	github.com/sirupsen/logrus v1.9.4
@@ -65,10 +65,10 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/go-version v1.7.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
-	github.com/jackc/pgconn v1.14.0 // indirect
+	github.com/jackc/pgconn v1.14.3 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgproto3/v2 v2.3.2 // indirect
+	github.com/jackc/pgproto3/v2 v2.3.3 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgtype v1.14.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect

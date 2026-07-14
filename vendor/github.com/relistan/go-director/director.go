@@ -2,6 +2,7 @@ package director
 
 import (
 	// "fmt"
+	"sync"
 	"time"
 )
 
@@ -17,6 +18,7 @@ const (
 type Looper interface {
 	Loop(fn func() error)
 	Wait() error
+	WaitWithoutError()
 	Done(err error)
 	Quit()
 }
@@ -29,20 +31,23 @@ type Looper interface {
 // channel when the loop has completed successfully or an error if the loop
 // resulted in an error condition.
 type TimedLooper struct {
-	Count     int
-	Interval  time.Duration
-	DoneChan  chan error
-	quitChan  chan bool
-	Immediate bool
+	Count         int
+	Interval      time.Duration
+	DoneChan      chan error
+	quitChan      chan struct{}
+	Immediate     bool
+	finalizedChan chan struct{}
+	finalize      sync.Once
 }
 
 func NewTimedLooper(count int, interval time.Duration, done chan error) *TimedLooper {
 	return &TimedLooper{
-		Count:     count,
-		Interval:  interval,
-		DoneChan:  done,
-		quitChan:  make(chan bool),
-		Immediate: false,
+		Count:         count,
+		Interval:      interval,
+		DoneChan:      done,
+		quitChan:      make(chan struct{}),
+		Immediate:     false,
+		finalizedChan: make(chan struct{}),
 	}
 }
 
@@ -50,11 +55,12 @@ func NewTimedLooper(count int, interval time.Duration, done chan error) *TimedLo
 // immediately after calling on Loop() (as opposed to waiting until the tick)
 func NewImmediateTimedLooper(count int, interval time.Duration, done chan error) *TimedLooper {
 	return &TimedLooper{
-		Count:     count,
-		Interval:  interval,
-		DoneChan:  done,
-		quitChan:  make(chan bool),
-		Immediate: true,
+		Count:         count,
+		Interval:      interval,
+		DoneChan:      done,
+		quitChan:      make(chan struct{}),
+		Immediate:     true,
+		finalizedChan: make(chan struct{}),
 	}
 }
 
@@ -62,10 +68,25 @@ func (l *TimedLooper) Wait() error {
 	return <-l.DoneChan
 }
 
+// WaitWithoutError, unlike Wait(), can be waited on by multiple goroutine
+// safely. It does not, however, return the last error.
+func (l *TimedLooper) WaitWithoutError() {
+	<-l.finalizedChan
+}
+
 // Signal a dependant routine that we're done with our work
 func (l *TimedLooper) Done(err error) {
+	if l.finalizedChan != nil {
+		l.finalize.Do(func() { close(l.finalizedChan) })
+	}
+
 	if l.DoneChan != nil {
-		l.DoneChan <- err
+		select {
+		case l.DoneChan <- err:
+			// do nothing else
+		default:
+			// do nothing
+		}
 	}
 }
 
@@ -130,23 +151,24 @@ func (l *TimedLooper) Loop(fn func() error) {
 // done() and return as quickly as possible. It is does not intervene between
 // iterations.
 func (l *TimedLooper) Quit() {
-	go func() {
-		l.quitChan <- true
-	}()
+	close(l.quitChan)
 }
 
 // A FreeLooper is like a TimedLooper but doesn't wait between iterations.
 type FreeLooper struct {
-	Count    int
-	DoneChan chan error
-	quitChan chan bool
+	Count         int
+	DoneChan      chan error
+	quitChan      chan struct{}
+	finalizedChan chan struct{}
+	finalize      sync.Once
 }
 
 func NewFreeLooper(count int, done chan error) *FreeLooper {
 	return &FreeLooper{
-		Count:    count,
-		DoneChan: done,
-		quitChan: make(chan bool),
+		Count:         count,
+		DoneChan:      done,
+		quitChan:      make(chan struct{}),
+		finalizedChan: make(chan struct{}),
 	}
 }
 
@@ -154,12 +176,25 @@ func (l *FreeLooper) Wait() error {
 	return <-l.DoneChan
 }
 
+func (l *FreeLooper) WaitWithoutError() {
+	<-l.finalizedChan
+}
+
 // This is used internally, but can also be used by controlling routines to
 // signal that a job is completed. The FreeLooper doesn's support its use
 // outside the internals.
 func (l *FreeLooper) Done(err error) {
+	if l.finalizedChan != nil {
+		l.finalize.Do(func() { close(l.finalizedChan) })
+	}
+
 	if l.DoneChan != nil {
-		l.DoneChan <- err
+		select {
+		case l.DoneChan <- err:
+			// do nothing else
+		default:
+			// do nothing
+		}
 	}
 }
 
@@ -196,7 +231,5 @@ func (l *FreeLooper) Loop(fn func() error) {
 // Done() and return as quickly as possible. It is does not intervene between
 // iterations. It is a non-blocking operation.
 func (l *FreeLooper) Quit() {
-	go func() {
-		l.quitChan <- true
-	}()
+	close(l.quitChan)
 }
