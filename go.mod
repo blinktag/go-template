@@ -9,7 +9,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/joho/godotenv v1.3.0
+	github.com/joho/godotenv v1.5.1
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/nats-io/nats.go v1.27.1
 	github.com/onsi/ginkgo v1.16.5
