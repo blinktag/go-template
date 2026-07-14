@@ -19,7 +19,7 @@ require (
 	github.com/rabbitmq/amqp091-go v1.12.0
 	github.com/relistan/go-director v0.0.0-20240410125439-78829fce487d
 	github.com/satori/go.uuid v1.2.0
-	github.com/segmentio/kafka-go v0.4.42
+	github.com/segmentio/kafka-go v0.4.51
 	github.com/sirupsen/logrus v1.9.4
 	github.com/streamdal/natty v0.0.39
 	github.com/streamdal/rabbit v0.1.27

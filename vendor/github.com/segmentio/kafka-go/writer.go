@@ -29,7 +29,7 @@ import (
 //
 //		// Construct a synchronous writer (the default mode).
 //		w := &kafka.Writer{
-//			Addr:         Addr: kafka.TCP("localhost:9092", "localhost:9093", "localhost:9094"),
+//			Addr:         kafka.TCP("localhost:9092", "localhost:9093", "localhost:9094"),
 //			Topic:        "topic-A",
 //			RequiredAcks: kafka.RequireAll,
 //		}
@@ -55,7 +55,7 @@ import (
 // writer to receive notifications of messages being written to kafka:
 //
 //	w := &kafka.Writer{
-//		Addr:         Addr: kafka.TCP("localhost:9092", "localhost:9093", "localhost:9094"),
+//		Addr:         kafka.TCP("localhost:9092", "localhost:9093", "localhost:9094"),
 //		Topic:        "topic-A",
 //		RequiredAcks: kafka.RequireAll,
 //		Async:        true, // make the writer asynchronous
@@ -635,7 +635,7 @@ func (w *Writer) WriteMessages(ctx context.Context, msgs ...Message) error {
 		}
 	}
 
-	// We use int32 here to half the memory footprint (compared to using int
+	// We use int32 here to halve the memory footprint (compared to using int
 	// on 64 bits architectures). We map lists of the message indexes instead
 	// of the message values for the same reason, int32 is 4 bytes, vs a full
 	// Message value which is 100+ bytes and contains pointers and contributes
@@ -891,13 +891,13 @@ func (w *Writer) Stats() WriterStats {
 		Retries:         stats.retries.snapshot(),
 		BatchSize:       stats.batchSize.snapshot(),
 		BatchBytes:      stats.batchSizeBytes.snapshot(),
-		MaxAttempts:     int64(w.MaxAttempts),
-		WriteBackoffMin: w.WriteBackoffMin,
-		WriteBackoffMax: w.WriteBackoffMax,
-		MaxBatchSize:    int64(w.BatchSize),
-		BatchTimeout:    w.BatchTimeout,
-		ReadTimeout:     w.ReadTimeout,
-		WriteTimeout:    w.WriteTimeout,
+		MaxAttempts:     int64(w.maxAttempts()),
+		WriteBackoffMin: w.writeBackoffMin(),
+		WriteBackoffMax: w.writeBackoffMax(),
+		MaxBatchSize:    int64(w.batchSize()),
+		BatchTimeout:    w.batchTimeout(),
+		ReadTimeout:     w.readTimeout(),
+		WriteTimeout:    w.writeTimeout(),
 		RequiredAcks:    int64(w.RequiredAcks),
 		Async:           w.Async,
 		Topic:           w.Topic,
@@ -1156,7 +1156,7 @@ func (ptw *partitionWriter) writeBatch(batch *writeBatch) {
 		stats.errors.observe(1)
 
 		ptw.w.withErrorLogger(func(log Logger) {
-			log.Printf("error writing messages to %s (partition %d): %s", key.topic, key.partition, err)
+			log.Printf("error writing messages to %s (partition %d, attempt %d): %s", key.topic, key.partition, attempt, err)
 		})
 
 		if !isTemporary(err) && !isTransientNetworkError(err) {
