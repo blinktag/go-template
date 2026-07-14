@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"hash/crc32"
 	"io"
+	"math"
 	"reflect"
 	"sync"
 	"sync/atomic"
@@ -129,12 +130,12 @@ func (e *encoder) encodeInt64(v value) {
 	e.writeInt64(v.int64())
 }
 
-func (e *encoder) encodeString(v value) {
-	e.writeString(v.string())
+func (e *encoder) encodeFloat64(v value) {
+	e.writeFloat64(v.float64())
 }
 
-func (e *encoder) encodeVarString(v value) {
-	e.writeVarString(v.string())
+func (e *encoder) encodeString(v value) {
+	e.writeString(v.string())
 }
 
 func (e *encoder) encodeCompactString(v value) {
@@ -145,10 +146,6 @@ func (e *encoder) encodeNullString(v value) {
 	e.writeNullString(v.string())
 }
 
-func (e *encoder) encodeVarNullString(v value) {
-	e.writeVarNullString(v.string())
-}
-
 func (e *encoder) encodeCompactNullString(v value) {
 	e.writeCompactNullString(v.string())
 }
@@ -157,20 +154,12 @@ func (e *encoder) encodeBytes(v value) {
 	e.writeBytes(v.bytes())
 }
 
-func (e *encoder) encodeVarBytes(v value) {
-	e.writeVarBytes(v.bytes())
-}
-
 func (e *encoder) encodeCompactBytes(v value) {
 	e.writeCompactBytes(v.bytes())
 }
 
 func (e *encoder) encodeNullBytes(v value) {
 	e.writeNullBytes(v.bytes())
-}
-
-func (e *encoder) encodeVarNullBytes(v value) {
-	e.writeVarNullBytes(v.bytes())
 }
 
 func (e *encoder) encodeCompactNullBytes(v value) {
@@ -246,6 +235,11 @@ func (e *encoder) writeInt64(i int64) {
 	e.Write(e.buffer[:8])
 }
 
+func (e *encoder) writeFloat64(f float64) {
+	writeFloat64(e.buffer[:8], f)
+	e.Write(e.buffer[:8])
+}
+
 func (e *encoder) writeString(s string) {
 	e.writeInt16(int16(len(s)))
 	e.WriteString(s)
@@ -270,15 +264,6 @@ func (e *encoder) writeNullString(s string) {
 	}
 }
 
-func (e *encoder) writeVarNullString(s string) {
-	if s == "" {
-		e.writeVarInt(-1)
-	} else {
-		e.writeVarInt(int64(len(s)))
-		e.WriteString(s)
-	}
-}
-
 func (e *encoder) writeCompactNullString(s string) {
 	if s == "" {
 		e.writeUnsignedVarInt(0)
@@ -290,11 +275,6 @@ func (e *encoder) writeCompactNullString(s string) {
 
 func (e *encoder) writeBytes(b []byte) {
 	e.writeInt32(int32(len(b)))
-	e.Write(b)
-}
-
-func (e *encoder) writeVarBytes(b []byte) {
-	e.writeVarInt(int64(len(b)))
 	e.Write(b)
 }
 
@@ -330,16 +310,6 @@ func (e *encoder) writeCompactNullBytes(b []byte) {
 	}
 }
 
-func (e *encoder) writeBytesFrom(b Bytes) error {
-	size := int64(b.Len())
-	e.writeInt32(int32(size))
-	n, err := io.Copy(e, b)
-	if err == nil && n != size {
-		err = fmt.Errorf("size of bytes does not match the number of bytes that were written (size=%d, written=%d): %w", size, n, io.ErrUnexpectedEOF)
-	}
-	return err
-}
-
 func (e *encoder) writeNullBytesFrom(b Bytes) error {
 	if b == nil {
 		e.writeInt32(-1)
@@ -365,21 +335,6 @@ func (e *encoder) writeVarNullBytesFrom(b Bytes) error {
 		n, err := io.Copy(e, b)
 		if err == nil && n != size {
 			err = fmt.Errorf("size of nullable bytes does not match the number of bytes that were written (size=%d, written=%d): %w", size, n, io.ErrUnexpectedEOF)
-		}
-		return err
-	}
-}
-
-func (e *encoder) writeCompactNullBytesFrom(b Bytes) error {
-	if b == nil {
-		e.writeUnsignedVarInt(0)
-		return nil
-	} else {
-		size := int64(b.Len())
-		e.writeUnsignedVarInt(uint64(size + 1))
-		n, err := io.Copy(e, b)
-		if err == nil && n != size {
-			err = fmt.Errorf("size of compact nullable bytes does not match the number of bytes that were written (size=%d, written=%d): %w", size, n, io.ErrUnexpectedEOF)
 		}
 		return err
 	}
@@ -433,6 +388,8 @@ func encodeFuncOf(typ reflect.Type, version int16, flexible bool, tag structTag)
 		return (*encoder).encodeInt32
 	case reflect.Int64:
 		return (*encoder).encodeInt64
+	case reflect.Float64:
+		return (*encoder).encodeFloat64
 	case reflect.String:
 		return stringEncodeFuncOf(flexible, tag)
 	case reflect.Struct:
@@ -583,6 +540,10 @@ func writeInt32(b []byte, i int32) {
 
 func writeInt64(b []byte, i int64) {
 	binary.BigEndian.PutUint64(b, uint64(i))
+}
+
+func writeFloat64(b []byte, f float64) {
+	binary.BigEndian.PutUint64(b, math.Float64bits(f))
 }
 
 func Marshal(version int16, value interface{}) ([]byte, error) {

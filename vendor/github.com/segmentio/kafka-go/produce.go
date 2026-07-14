@@ -111,26 +111,26 @@ type ProduceResponse struct {
 
 	// Offset of the first record that was written to the topic partition.
 	//
-	// This field will be zero if the kafka broker did no support the Produce
-	// API in version 3 or above.
+	// This field will be zero if the kafka broker did not support Produce API
+	// version 3 or above.
 	BaseOffset int64
 
 	// Time at which the broker wrote the records to the topic partition.
 	//
-	// This field will be zero if the kafka broker did no support the Produce
-	// API in version 2 or above.
+	// This field will be zero if the kafka broker did not support Produce API
+	// version 2 or above.
 	LogAppendTime time.Time
 
 	// First offset in the topic partition that the records were written to.
 	//
-	// This field will be zero if the kafka broker did no support the Produce
-	// API in version 5 or above (or if the first offset is zero).
+	// This field will be zero if the kafka broker did not support Produce
+	// API version 5 or above (or if the first offset is zero).
 	LogStartOffset int64
 
 	// If errors occurred writing specific records, they will be reported in
 	// this map.
 	//
-	// This field will always be empty if the kafka broker did no support the
+	// This field will always be empty if the kafka broker did not support the
 	// Produce API in version 8 or above.
 	RecordErrors map[int]error
 }
@@ -247,35 +247,6 @@ func (p produceRequestPartitionV2) writeTo(wb *writeBuffer) {
 	wb.writeInt32(p.Partition)
 	wb.writeInt32(p.MessageSetSize)
 	p.MessageSet.writeTo(wb)
-}
-
-type produceResponseV2 struct {
-	ThrottleTime int32
-	Topics       []produceResponseTopicV2
-}
-
-func (r produceResponseV2) size() int32 {
-	return 4 + sizeofArray(len(r.Topics), func(i int) int32 { return r.Topics[i].size() })
-}
-
-func (r produceResponseV2) writeTo(wb *writeBuffer) {
-	wb.writeInt32(r.ThrottleTime)
-	wb.writeArray(len(r.Topics), func(i int) { r.Topics[i].writeTo(wb) })
-}
-
-type produceResponseTopicV2 struct {
-	TopicName  string
-	Partitions []produceResponsePartitionV2
-}
-
-func (t produceResponseTopicV2) size() int32 {
-	return sizeofString(t.TopicName) +
-		sizeofArray(len(t.Partitions), func(i int) int32 { return t.Partitions[i].size() })
-}
-
-func (t produceResponseTopicV2) writeTo(wb *writeBuffer) {
-	wb.writeString(t.TopicName)
-	wb.writeArray(len(t.Partitions), func(i int) { t.Partitions[i].writeTo(wb) })
 }
 
 type produceResponsePartitionV2 struct {

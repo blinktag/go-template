@@ -35,10 +35,6 @@ func valueOf(x interface{}) value {
 	return value{val: reflect.ValueOf(x).Elem()}
 }
 
-func makeValue(t reflect.Type) value {
-	return value{val: reflect.New(t).Elem()}
-}
-
 func (v value) bool() bool { return v.val.Bool() }
 
 func (v value) int8() int8 { return int8(v.int64()) }
@@ -49,13 +45,15 @@ func (v value) int32() int32 { return int32(v.int64()) }
 
 func (v value) int64() int64 { return v.val.Int() }
 
+func (v value) float64() float64 { return v.val.Float() }
+
 func (v value) string() string { return v.val.String() }
 
 func (v value) bytes() []byte { return v.val.Bytes() }
 
 func (v value) iface(t reflect.Type) interface{} { return v.val.Addr().Interface() }
 
-func (v value) array(t reflect.Type) array { return array{val: v.val} }
+func (v value) array(t reflect.Type) array { return array(v) }
 
 func (v value) setBool(b bool) { v.val.SetBool(b) }
 
@@ -66,6 +64,8 @@ func (v value) setInt16(i int16) { v.setInt64(int64(i)) }
 func (v value) setInt32(i int32) { v.setInt64(int64(i)) }
 
 func (v value) setInt64(i int64) { v.val.SetInt(i) }
+
+func (v value) setFloat64(f float64) { v.val.SetFloat(f) }
 
 func (v value) setString(s string) { v.val.SetString(s) }
 
