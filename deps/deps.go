@@ -9,21 +9,21 @@ import (
 
 	"github.com/InVisionApp/go-health"
 	gllogrus "github.com/InVisionApp/go-logger/shims/logrus"
-	"github.com/batchcorp/go-template/types"
+	"github.com/blinktag/go-template/types"
 	"github.com/nats-io/nats.go"
 	"github.com/pkg/errors"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/sirupsen/logrus"
 
-	"github.com/batchcorp/go-template/backends/cache"
-	"github.com/batchcorp/go-template/backends/db"
-	"github.com/batchcorp/go-template/backends/kafka"
-	"github.com/batchcorp/go-template/backends/postgres"
-	"github.com/batchcorp/go-template/config"
-	"github.com/batchcorp/go-template/services/hsb"
-	"github.com/batchcorp/go-template/services/isb"
-	"github.com/batchcorp/rabbit"
+	"github.com/blinktag/go-template/backends/cache"
+	"github.com/blinktag/go-template/backends/db"
+	"github.com/blinktag/go-template/backends/kafka"
+	"github.com/blinktag/go-template/backends/postgres"
+	"github.com/blinktag/go-template/config"
+	"github.com/blinktag/go-template/services/hsb"
+	"github.com/blinktag/go-template/services/isb"
 	"github.com/streamdal/natty"
+	"github.com/streamdal/rabbit"
 )
 
 const (

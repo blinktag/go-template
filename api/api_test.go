@@ -8,8 +8,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/batchcorp/go-template/config"
-	"github.com/batchcorp/go-template/deps"
+	"github.com/blinktag/go-template/config"
+	"github.com/blinktag/go-template/deps"
 )
 
 var _ = Describe("API", func() {

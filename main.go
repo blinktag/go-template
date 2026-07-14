@@ -10,9 +10,9 @@ import (
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"github.com/batchcorp/go-template/api"
-	"github.com/batchcorp/go-template/config"
-	"github.com/batchcorp/go-template/deps"
+	"github.com/blinktag/go-template/api"
+	"github.com/blinktag/go-template/config"
+	"github.com/blinktag/go-template/deps"
 )
 
 var (

@@ -1,11 +1,10 @@
-module github.com/batchcorp/go-template
+module github.com/blinktag/go-template
 
 go 1.26
 
 require (
 	github.com/InVisionApp/go-health v2.1.0+incompatible
 	github.com/InVisionApp/go-logger v1.0.1
-	github.com/batchcorp/rabbit v0.1.19
 	github.com/golang/protobuf v1.5.3
 	github.com/jackc/pgx/v4 v4.18.1
 	github.com/jmoiron/sqlx v1.2.0
@@ -16,13 +15,14 @@ require (
 	github.com/onsi/gomega v1.27.8
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
-	github.com/rabbitmq/amqp091-go v1.5.0
+	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/relistan/go-director v0.0.0-20200406104025-dbbf5d95248d
 	github.com/satori/go.uuid v1.2.0
 	github.com/segmentio/kafka-go v0.4.29
-	github.com/sirupsen/logrus v1.7.0
+	github.com/sirupsen/logrus v1.9.3
 	github.com/streamdal/natty v0.0.39
-	golang.org/x/crypto v0.11.0
+	github.com/streamdal/rabbit v0.1.27
+	golang.org/x/crypto v0.45.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.37.1
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 )
@@ -62,10 +62,10 @@ require (
 	github.com/philhofer/fwd v1.1.1 // indirect
 	github.com/pierrec/lz4/v4 v4.1.14 // indirect
 	github.com/tinylib/msgp v1.1.2 // indirect
-	golang.org/x/net v0.12.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
-	golang.org/x/term v0.10.0 // indirect
-	golang.org/x/text v0.11.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/term v0.37.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/time v0.0.0-20220922220347-f3bd1da661af // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect

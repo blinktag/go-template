@@ -12,14 +12,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/batchcorp/go-template/types"
+	"github.com/blinktag/go-template/types"
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
 	"github.com/relistan/go-director"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 
-	"github.com/batchcorp/go-template/backends/kafka"
+	"github.com/blinktag/go-template/backends/kafka"
 )
 
 const (

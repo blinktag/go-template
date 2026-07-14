@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"gopkg.in/DataDog/dd-trace-go.v1/contrib/julienschmidt/httprouter"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/DataDog/dd-trace-go.v1/contrib/julienschmidt/httprouter"
 
-	"github.com/batchcorp/go-template/config"
-	"github.com/batchcorp/go-template/deps"
+	"github.com/blinktag/go-template/config"
+	"github.com/blinktag/go-template/deps"
 )
 
 var (
@@ -68,4 +68,3 @@ func WriteJSON(rw http.ResponseWriter, payload interface{}, status int) {
 		return
 	}
 }
-

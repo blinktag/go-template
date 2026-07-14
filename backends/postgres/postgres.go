@@ -3,7 +3,7 @@ package postgres
 import (
 	"github.com/sirupsen/logrus"
 
-	"github.com/batchcorp/go-template/backends/db"
+	"github.com/blinktag/go-template/backends/db"
 )
 
 type Postgres struct {
@@ -30,8 +30,8 @@ type SSLOptions struct{}
 func New(db *db.Storage) *Postgres {
 
 	return &Postgres{
-		DB:          db,
-		log:         logrus.WithField("pkg", "postgres"),
+		DB:  db,
+		log: logrus.WithField("pkg", "postgres"),
 	}
 
 }

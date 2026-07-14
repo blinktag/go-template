@@ -1,7 +1,7 @@
 package isb
 
 import (
-	"github.com/batchcorp/go-template/types"
+	"github.com/blinktag/go-template/types"
 	"github.com/golang/protobuf/proto"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
