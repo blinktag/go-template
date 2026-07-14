@@ -4,15 +4,14 @@ import (
 	"context"
 	"os"
 
+	kingpin "github.com/alecthomas/kingpin/v2"
+	"github.com/blinktag/go-template/api"
+	"github.com/blinktag/go-template/config"
+	"github.com/blinktag/go-template/deps"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh/terminal"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
-	"gopkg.in/alecthomas/kingpin.v2"
-
-	"github.com/blinktag/go-template/api"
-	"github.com/blinktag/go-template/config"
-	"github.com/blinktag/go-template/deps"
 )
 
 var (
