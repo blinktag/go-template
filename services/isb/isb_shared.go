@@ -1,10 +1,9 @@
 package isb
 
 import (
+	"github.com/batchcorp/go-template/types"
 	"github.com/golang/protobuf/proto"
 	amqp "github.com/rabbitmq/amqp091-go"
-
-	"github.com/batchcorp/schemas/build/go/events"
 )
 
 // SharedConsumeFunc will receive rabbitmq messages on only one running instance of this service
@@ -14,7 +13,7 @@ func (i *ISB) SharedConsumeFunc(msg amqp.Delivery) error {
 		return nil
 	}
 
-	pbMessage := &events.Message{}
+	pbMessage := &types.StubMessage{}
 
 	if err := proto.Unmarshal(msg.Body, pbMessage); err != nil {
 		i.log.Errorf("unable to unmarshal event message: %s", err)

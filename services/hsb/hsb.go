@@ -12,7 +12,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/batchcorp/schemas/build/go/events"
+	"github.com/batchcorp/go-template/types"
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
 	"github.com/relistan/go-director"
@@ -40,7 +40,7 @@ type HSB struct {
 type Config struct {
 	Kafka         kafka.IKafka
 	Context       context.Context
-	HSBChan       chan *events.Manifest
+	HSBChan       chan *types.StubMessage
 	Looper        *director.FreeLooper
 	NumPublishers int
 }
@@ -107,7 +107,7 @@ func (h *HSB) Run(id string) {
 				return nil
 			}
 
-			if err := h.Kafka.PublishWithRetry(ctx, work.Batch.Collect.XCollectorHsbTopic, data, 3); err != nil {
+			if err := h.Kafka.PublishWithRetry(ctx, "CHANGE_HSB_TOPIC", data, 3); err != nil {
 				llog.Errorf("unable to publish msg: %s", err)
 				return nil
 			}

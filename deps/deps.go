@@ -9,14 +9,11 @@ import (
 
 	"github.com/InVisionApp/go-health"
 	gllogrus "github.com/InVisionApp/go-logger/shims/logrus"
+	"github.com/batchcorp/go-template/types"
 	"github.com/nats-io/nats.go"
 	"github.com/pkg/errors"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/sirupsen/logrus"
-
-	"github.com/batchcorp/natty"
-	"github.com/batchcorp/rabbit"
-	"github.com/batchcorp/schemas/build/go/events"
 
 	"github.com/batchcorp/go-template/backends/cache"
 	"github.com/batchcorp/go-template/backends/db"
@@ -25,6 +22,8 @@ import (
 	"github.com/batchcorp/go-template/config"
 	"github.com/batchcorp/go-template/services/hsb"
 	"github.com/batchcorp/go-template/services/isb"
+	"github.com/batchcorp/natty"
+	"github.com/batchcorp/rabbit"
 )
 
 const (
@@ -46,7 +45,7 @@ type Dependencies struct {
 	ISBService isb.IISB
 	HSBService hsb.IHSB
 
-	HSBChan chan *events.Manifest
+	HSBChan chan *types.StubMessage
 
 	Health         health.IHealth
 	DefaultContext context.Context
@@ -59,7 +58,7 @@ func New(cfg *config.Config) (*Dependencies, error) {
 	d := &Dependencies{
 		Health:         gohealth,
 		DefaultContext: context.Background(),
-		HSBChan:        make(chan *events.Manifest, 0),
+		HSBChan:        make(chan *types.StubMessage, 0),
 	}
 
 	if err := d.setupHealthChecks(); err != nil {
