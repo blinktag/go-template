@@ -22,8 +22,8 @@ import (
 	"github.com/batchcorp/go-template/config"
 	"github.com/batchcorp/go-template/services/hsb"
 	"github.com/batchcorp/go-template/services/isb"
-	"github.com/batchcorp/natty"
 	"github.com/batchcorp/rabbit"
+	"github.com/streamdal/natty"
 )
 
 const (
