@@ -3,6 +3,8 @@ module github.com/blinktag/go-template
 go 1.26
 
 require (
+	github.com/DataDog/dd-trace-go/contrib/julienschmidt/httprouter/v2 v2.3.0
+	github.com/DataDog/dd-trace-go/v2 v2.3.0
 	github.com/InVisionApp/go-health v2.1.0+incompatible
 	github.com/InVisionApp/go-logger v1.0.1
 	github.com/alecthomas/kingpin/v2 v2.4.0
@@ -24,7 +26,6 @@ require (
 	github.com/streamdal/natty v0.0.39
 	github.com/streamdal/rabbit v0.1.27
 	golang.org/x/crypto v0.54.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.74.8
 )
 
 require (
@@ -37,8 +38,6 @@ require (
 	github.com/DataDog/datadog-agent/pkg/util/scrubber v0.67.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/version v0.67.0 // indirect
 	github.com/DataDog/datadog-go/v5 v5.6.0 // indirect
-	github.com/DataDog/dd-trace-go/contrib/julienschmidt/httprouter/v2 v2.3.0 // indirect
-	github.com/DataDog/dd-trace-go/v2 v2.3.0 // indirect
 	github.com/DataDog/go-libddwaf/v4 v4.3.2 // indirect
 	github.com/DataDog/go-runtime-metrics-internal v0.0.4-0.20250721125240-fdf1ef85b633 // indirect
 	github.com/DataDog/go-sqllexer v0.1.6 // indirect
@@ -126,6 +125,7 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250425173222-7b384671a197 // indirect
 	google.golang.org/grpc v1.72.0 // indirect
 	google.golang.org/protobuf v1.36.7 // indirect
+	gopkg.in/DataDog/dd-trace-go.v1 v1.74.8 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

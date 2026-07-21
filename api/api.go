@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	httprouter "github.com/DataDog/dd-trace-go/contrib/julienschmidt/httprouter/v2"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/DataDog/dd-trace-go.v1/contrib/julienschmidt/httprouter"
 
 	"github.com/blinktag/go-template/config"
 	"github.com/blinktag/go-template/deps"

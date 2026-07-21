@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	kingpin "github.com/alecthomas/kingpin/v2"
 	"github.com/blinktag/go-template/api"
 	"github.com/blinktag/go-template/config"
@@ -11,7 +12,6 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/ssh/terminal"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 var (

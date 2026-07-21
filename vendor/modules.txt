@@ -795,7 +795,6 @@ google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/timestamppb
 # gopkg.in/DataDog/dd-trace-go.v1 v1.74.8
 ## explicit; go 1.24.0
-gopkg.in/DataDog/dd-trace-go.v1/contrib/julienschmidt/httprouter
 gopkg.in/DataDog/dd-trace-go.v1/datastreams/options
 gopkg.in/DataDog/dd-trace-go.v1/ddtrace
 gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext
