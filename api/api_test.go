@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 
 	"github.com/InVisionApp/go-health"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"github.com/blinktag/go-template/config"
